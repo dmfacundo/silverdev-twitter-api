@@ -12,7 +12,8 @@ Create a Twitter MVP that can:
 
 ## Create an account
 - Get the account params
-- Verify username is not empty, has at least 5 and at most 50 characters long, and be unique
+- Verify username is not empty, has at least 5 and at most 50 characters long, and be unique.
+- Verify that the username does not contain spaces or special characters.
 - **IF** at least one validation fails, return an error \
   **ELSE IF** insert the record into the database
 
