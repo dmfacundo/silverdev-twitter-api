@@ -4,6 +4,7 @@ class Account < ApplicationRecord
     join_table: "accounts_friends",
     foreign_key: "account_id",
     association_foreign_key: "friend_id"
+  has_many :posts, dependent: :destroy
 
   validates :name,
     presence: true,
