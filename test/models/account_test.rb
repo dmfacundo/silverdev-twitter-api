@@ -1,6 +1,11 @@
 require "test_helper"
 
 class AccountTest < ActiveSupport::TestCase
+  def main_account = @main ||= accounts(:one)
+  def friend = @friend ||= accounts(:two)
+  def another_friend = @another_friend ||= accounts(:three)
+  def feed = @feed ||= main_account.feed(1)
+
   test "name is not empty" do
     account = Account.new(name: "")
     assert_not account.save
@@ -39,22 +44,35 @@ class AccountTest < ActiveSupport::TestCase
   end
 
   test "could follow other accounts" do
-    first_account = accounts(:one)
-    second_account = accounts(:two)
-    first_account.follow(second_account)
-    assert first_account.friends.include?(second_account)
+    main_account.follow(friend)
+    assert main_account.friends.include?(friend)
   end
 
   test "shouldn't follow the same account twice" do
-    first_account = accounts(:one)
-    second_account = accounts(:two)
-    first_account.follow(second_account)
-    assert_not first_account.follow(second_account)
+    main_account.follow(friend)
+    assert_not main_account.follow(friend)
   end
 
   test "shouldn't follow itself" do
-    first_account = accounts(:one)
-    assert_not first_account.follow(first_account)
-    assert_not first_account.friends.include?(first_account)
+    assert_not main_account.follow(main_account)
+    assert_not main_account.friends.include?(main_account)
+  end
+
+  test "feed should return posts from friends" do
+    main_account.follow(friend)
+    main_account.follow(another_friend)
+    posts = Post.where(account_id: [friend.id, another_friend.id])
+    assert posts.all? { |post| feed.find_by(id: post.id).present? }
+  end
+
+  test "feed shouldn't return posts from not friends" do
+    not_friend = Account.create(name: "NotFriend")
+    post = not_friend.posts.create(body: "Lorem ipsum")
+    assert_not feed.find_by(id: post.id).present?
+  end
+
+  test "feed shouldn't return post from itself" do
+    post = main_account.posts.create(body: "Lorem ipsum")
+    assert_not feed.find_by(id: post.id).present?
   end
 end
