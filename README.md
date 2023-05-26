@@ -36,9 +36,10 @@ Create a Twitter MVP that can:
 ## Feed endpoint
 - Identify current_user
 - **IF** page params is empty\
-  **THEN** get the first 20 tweets from followed accounts \
-  **ELSE** offset should be equal to `page * 20`
-- **RENDER** the given tweets as a json from the controller
+  **THEN** get the first 20 tweets from followed accounts and return\
+  **ELSE** offset should be equal to `page * 20` and return the feed corresponding to that page
+- **IF** page is negative \
+  **THEN** should return a bad_request
 
 
 # Getting started
@@ -53,4 +54,7 @@ To get the Rails server running locally:
 
 
 # About
-This project was built with `ruby 3.2.2` and `rails 7.0.5`. We use `postgresql` as database.
+This project was built with
+- `ruby 3.2.2`
+- `rails 7.0.5`
+- `postgresql`

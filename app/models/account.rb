@@ -14,8 +14,17 @@ class Account < ApplicationRecord
 
   def follow(account)
     errors.add(:friends, "You are already following this account") if friends.include?(account)
-    errors.add(:friends, "You can't follow yourself") if account == self
+    errors.add(:friends, "You can't follow yourself") if account.id == self.id
     return false if errors.any?
     friends << account
+    true
+  end
+
+  def feed(page)
+    raise ArgumentError, "Page must be greater than or equal to 0" if page.to_i < 0
+    Post.where(account_id: friends.ids)
+      .limit(20)
+      .offset(20 * (page.to_i - 1))
+      .order(created_at: :desc)
   end
 end
