@@ -12,6 +12,15 @@ class Api::V1::AccountsController < ApplicationController
     end
   end
 
+  def follow
+    @account = Account.find(params[:account_id])
+    if current_user.follow(@account)
+      render json: @account, status: :ok
+    else
+      render json: @account.errors, status: :unprocessable_entity
+    end
+  end
+
   private
 
   # Only allow a list of trusted parameters through.
