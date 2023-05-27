@@ -38,7 +38,7 @@ Create a Twitter MVP that can:
 - **IF** page params is empty\
   **THEN** get the first 20 tweets from followed accounts and return\
   **ELSE** offset should be equal to `page * 20` and return the feed corresponding to that page
-- **IF** page is negative \
+- **IF** page is not a positive number \
   **THEN** should return a bad_request
 
 
