@@ -12,7 +12,7 @@ class Api::V1::PostsController < ApplicationController
 
   # GET /feed
   def feed
-    render json: current_user.feed(params[:page] || 1)
+    render json: Post.feed(current_user, params[:page] || 1)
   rescue ArgumentError => e
     render json: { error: e.message }, status: :bad_request
   end

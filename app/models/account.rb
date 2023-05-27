@@ -19,12 +19,4 @@ class Account < ApplicationRecord
     friends << account
     true
   end
-
-  def feed(page)
-    raise ArgumentError, "Page must be greater than or equal to 0" if page.to_i < 0
-    Post.where(account_id: friends.ids)
-      .limit(20)
-      .offset(20 * (page.to_i - 1))
-      .order(created_at: :desc)
-  end
 end
